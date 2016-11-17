@@ -8,6 +8,8 @@ import java.util.*;
 public class TautologyVerifier {
 
     private HashMap<Character,Boolean> values = new HashMap<>();
+    private Stack<Boolean> results = new Stack<>();
+    private Stack<Character> operators = new Stack<>();
 
     public boolean isTautology(char[] chars, List<Character> keys, int index) {
 
@@ -44,8 +46,8 @@ public class TautologyVerifier {
 
     public boolean evaluate(char[] chars) {
 
-        Stack<Boolean> results = new Stack<>();
-        Stack<Character> operators = new Stack<>();
+        results.clear();
+        operators.clear();
 
         for (char var : chars) {
             if ((var == '(') || (var == '&') || (var == '|') || (var == '!')) {
@@ -56,7 +58,7 @@ public class TautologyVerifier {
                 boolean result = results.pop();
 
                 while (operator != '(') {
-                    aggregate(operator, result, results);
+                    aggregate(operator, result);
                     operator = operators.pop();
                     result = results.pop();
                 }
@@ -73,7 +75,7 @@ public class TautologyVerifier {
                         operators.push(operator);
                     }
                     else {
-                        aggregate(operator,values.get(var),results);
+                        aggregate(operator,values.get(var));
                     }
                 }
             }
@@ -82,12 +84,12 @@ public class TautologyVerifier {
         while(!operators.isEmpty()) {
             char operator = operators.pop();
             boolean result = results.pop();
-            aggregate(operator,result,results);
+            aggregate(operator,result);
         }
         return results.pop();
     }
 
-    public void aggregate(char operator, boolean result, Stack<Boolean> results) {
+    public void aggregate(char operator, boolean result) {
 
         if(operator == '!') {
             results.push(!result);
