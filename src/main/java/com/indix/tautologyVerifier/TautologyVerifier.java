@@ -13,7 +13,7 @@ public class TautologyVerifier {
     private Stack<Boolean> results = new Stack<>();
     private Stack<Character> operators = new Stack<>();
 
-    public boolean isTautology(int index) {
+    private boolean isTautology(int index) {
 
         if(index==variables.size()) {
             return evaluate();
@@ -46,7 +46,7 @@ public class TautologyVerifier {
         return isTautology(0);
     }
 
-    public boolean evaluate() {
+    private boolean evaluate() {
 
         results.clear();
         operators.clear();
@@ -91,7 +91,7 @@ public class TautologyVerifier {
         return results.pop();
     }
 
-    public void aggregate(char operator, boolean result) {
+    private void aggregate(char operator, boolean result) {
 
         if(operator == '!') {
             results.push(!result);
