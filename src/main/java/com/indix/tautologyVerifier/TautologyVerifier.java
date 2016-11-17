@@ -7,31 +7,33 @@ import java.util.*;
  */
 public class TautologyVerifier {
 
+    private char[] chars;
+    private List<Character> variables;
     private HashMap<Character,Boolean> values = new HashMap<>();
     private Stack<Boolean> results = new Stack<>();
     private Stack<Character> operators = new Stack<>();
 
-    public boolean isTautology(char[] chars, List<Character> keys, int index) {
+    public boolean isTautology(int index) {
 
-        if(index==keys.size()) {
-            return evaluate(chars);
+        if(index==variables.size()) {
+            return evaluate();
         }
 
-        if(!isTautology(chars,keys,index+1))
+        if(!isTautology(index+1))
             return false;
 
-        values.put(keys.get(index), true);
+        values.put(variables.get(index), true);
 
-        if(!isTautology(chars,keys,index+1))
+        if(!isTautology(index+1))
             return false;
 
-        values.put(keys.get(index), false);
+        values.put(variables.get(index), false);
         return true;
     }
 
     public boolean isTautology(String expression) {
 
-        char[] chars = expression.toCharArray();
+        chars = expression.toCharArray();
         values.clear();
 
         for (char var : chars) {
@@ -40,11 +42,11 @@ public class TautologyVerifier {
             }
         }
 
-        List<Character> variables = new ArrayList<>(values.keySet());
-        return isTautology(chars, variables, 0);
+        variables = new ArrayList<>(values.keySet());
+        return isTautology(0);
     }
 
-    public boolean evaluate(char[] chars) {
+    public boolean evaluate() {
 
         results.clear();
         operators.clear();
